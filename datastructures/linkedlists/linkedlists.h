@@ -1,5 +1,7 @@
 #include "..\..\common\listnode.h"
 
+#include <stack>
+
 using namespace std;
 
 namespace DataStructures::LinkedLists
@@ -148,6 +150,77 @@ namespace DataStructures::LinkedLists
         }
         return head;
     }
+    
+    /*
+    206. Reverse Linked List
+    Easy
+
+    Given the head of a singly linked list, reverse the list, and return the reversed list.
+
+    Example 1:
+
+    Input: head = [1,2,3,4,5]
+    Output: [5,4,3,2,1]
+    */
+    ListNode* reverseList(ListNode* head) {
+        if (!head)
+            return nullptr;
+        
+        auto st = std::stack<ListNode *>{};
+        while (head)
+        {
+            st.push(head);
+            head = head->next;
+        }
+                     
+        auto reversedList = st.top();
+        st.pop();
+        auto listIt = reversedList;
+        while (!st.empty())
+        {
+            listIt->next = st.top();
+            st.pop();
+            listIt = listIt->next;
+        }
+        listIt->next = nullptr;
+        
+        return reversedList;
+    }
+
+    /*
+    83. Remove Duplicates from Sorted List
+    Easy
+
+    Given the head of a sorted linked list, delete all duplicates such that each element appears only once. Return the linked list sorted as well.
+
+    Example 1:
+
+    Input: head = [1,1,2]
+    Output: [1,2]
+    */
+    ListNode* deleteDuplicates(ListNode* head) {
+        if (head == 0 || head->next == 0)
+            return head;
+        
+        auto prev = head;
+        
+        auto next = head->next;
+        while (prev)
+        {
+            if (next && (next->val == prev->val))
+            {
+                prev->next = next->next;
+                next = next->next;
+            }
+            else
+            {
+                prev = next;
+                next = next ? next->next : 0;
+            }
+        }
+        
+        return head;
+    }
 
     void run()
     {
@@ -207,6 +280,39 @@ namespace DataStructures::LinkedLists
             assert(equal(list, expected));
 
             std::cout << "  [PASSED] 203. Remove Linked List Elements" << std::endl;
+        }
+        
+        {            
+            auto list = new ListNode(1);
+            list->next = new ListNode(2);
+            list->next->next = new ListNode(3);
+            list->next->next->next = new ListNode(4);
+            list->next->next->next->next = new ListNode(5);
+            
+            auto expected = new ListNode(5);
+            expected->next = new ListNode(4);
+            expected->next->next = new ListNode(3);
+            expected->next->next->next = new ListNode(2);
+            expected->next->next->next->next = new ListNode(1);
+
+            auto result = reverseList(list);
+            assert(equal(result, expected));
+
+            std::cout << "  [PASSED] 206. Reverse Linked List" << std::endl;
+        }
+        
+        {            
+            auto list = new ListNode(1);
+            list->next = new ListNode(1);
+            list->next->next = new ListNode(2);
+            
+            auto expected = new ListNode(1);
+            expected->next = new ListNode(2);
+
+            auto result = deleteDuplicates(list);
+            assert(equal(result, expected));
+
+            std::cout << "  [PASSED] 83. Remove Duplicates from Sorted List" << std::endl;
         }
 
         std::cout << "[DataStructures][LinkedLists]  End" << std::endl;
