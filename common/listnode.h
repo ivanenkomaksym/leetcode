@@ -1,3 +1,6 @@
+#ifndef LISTNODE_H_
+#define LISTNODE_H_
+ 
  struct ListNode {
     int val;
     ListNode *next;
@@ -20,3 +23,5 @@ auto equal(ListNode *list1, ListNode *list2) -> bool
 
     return true;
 }
+
+#endif
