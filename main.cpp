@@ -5,12 +5,14 @@
 #include "datastructures/arrays/arrays.h"
 #include "datastructures/strings/strings.h"
 #include "datastructures/linkedlists/linkedlists.h"
+#include "datastructures/stacks/stacks.h"
 
 int main()
 {
     DataStructures::Arrays::run();
     DataStructures::Strings::run();
     DataStructures::LinkedLists::run();
+    DataStructures::Stacks::run();
 
     Algorithms::BinarySearch::run();
     Algorithms::TwoPointers::run();
