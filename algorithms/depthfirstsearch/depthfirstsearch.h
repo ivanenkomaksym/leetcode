@@ -1,4 +1,5 @@
 #include <iostream>
+#include <set>
 
 #include "..\..\common\treenode.h"
 #include "..\..\common\node.h"
@@ -183,6 +184,73 @@ namespace Algorithms::DepthFirstSearch
         return root;
     }
 
+
+    /*
+    994. Rotting Oranges
+    Medium
+
+    You are given an m x n grid where each cell can have one of three values:
+
+        0 representing an empty cell,
+        1 representing a fresh orange, or
+        2 representing a rotten orange.
+
+    Every minute, any fresh orange that is 4-directionally adjacent to a rotten orange becomes rotten.
+
+    Return the minimum number of minutes that must elapse until no cell has a fresh orange. If this is impossible, return -1.
+
+    Example 1:
+
+    Input: grid = [[2,1,1],[1,1,0],[0,1,1]]
+    Output: 4
+    */
+    int orangesRotting(vector<vector<int>>& grid) {
+        auto rows = grid.size();
+        auto cols = grid[0].size();
+        
+        auto nofMinutes = 0;
+        
+        while (true)  
+        {
+            auto skip = std::set<std::pair<int, int>>{};
+            auto fresh = 0;
+            for (auto i = 0; i < rows; i++)
+            {
+                for (auto j = 0; j < cols; j++)
+                {
+                    if (grid[i][j] == 0)
+                        continue;
+                    
+                    auto findIt = skip.find({i, j});
+                    if (findIt != skip.end())
+                        continue;
+                    
+                    if (grid[i][j] == 2)
+                    {                   
+                        if (i > 0 && grid[i-1][j] == 1) { grid[i-1][j] = 2; fresh++; skip.insert({i-1, j}); }
+                        if (j > 0 && grid[i][j-1] == 1) { grid[i][j-1] = 2; fresh++; skip.insert({i, j-1}); }
+                        if ((i < rows - 1) && grid[i+1][j] == 1) { grid[i+1][j] = 2; fresh++; skip.insert({i+1, j}); }
+                        if ((j < cols - 1) && grid[i][j+1] == 1) { grid[i][j+1] = 2; fresh++; skip.insert({i, j+1}); }
+                    }
+                    
+                    if (grid[i][j] == 1)
+                        fresh++;
+                }
+            }
+            fresh -= skip.size();
+            
+            if (!skip.empty())
+                nofMinutes++;
+            else
+            {
+                if (fresh > 0)
+                    return -1;
+                
+                return nofMinutes;
+            }
+        }
+    }
+
     void run()
     {
         std::cout << "[Algorithms][DepthFirstSearch]  Start" << std::endl;
@@ -258,6 +326,15 @@ namespace Algorithms::DepthFirstSearch
             assert(equal(node, expected));
 
             std::cout << "  [PASSED] 116. Populating Next Right Pointers in Each Node" << std::endl;
+        }
+        
+        {
+            auto v = std::vector<std::vector<int>>{{2,1,1},{1,1,0},{0,1,1}};
+            auto result = orangesRotting(v);
+
+            assert(result == 4);
+
+            std::cout << "  [PASSED] 994. Rotting Oranges" << std::endl;
         }
 
         std::cout << "[Algorithms][DepthFirstSearch]  End" << std::endl;
