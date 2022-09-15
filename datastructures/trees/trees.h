@@ -217,6 +217,79 @@ namespace DataStructures::Trees
         return isSymmetric(root->left, root->right);        
     }
 
+    /*
+    226. Invert Binary Tree
+    Easy
+
+    Given the root of a binary tree, invert the tree, and return its root.
+
+    Example 1:
+
+    Input: root = [4,2,7,1,3,6,9]
+    Output: [4,7,2,9,6,3,1]
+    */
+    void invert(TreeNode *root)
+    {        
+        if (root == nullptr)
+            return;
+        
+        auto tmp = root->left;
+        root->left = root->right;
+        root->right = tmp;
+        
+        invert(root->left);
+        invert(root->right);
+    }
+    
+    TreeNode* invertTree(TreeNode* root) {
+        invert(root);
+        
+        return root;
+    }
+
+    /*
+    112. Path Sum
+    Easy
+
+    Given the root of a binary tree and an integer targetSum, return true if the tree has a root-to-leaf path such that adding up all the values along the path equals targetSum.
+
+    A leaf is a node with no children.
+
+    
+
+    Example 1:
+
+    Input: root = [5,4,8,11,null,13,4,7,2,null,null,null,1], targetSum = 22
+    Output: true
+    Explanation: The root-to-leaf path with the target sum is shown.
+    */
+    bool hasPathSum(TreeNode* root, int &sum, int &pathSum) {
+        if (!root)
+            return false;
+        
+        pathSum += root->val;
+        
+        if (!root->left && !root->right)
+        {
+            if (pathSum == sum)
+                return true;
+        }
+        
+        if (hasPathSum(root->left, sum, pathSum))
+            return true;
+        if (hasPathSum(root->right, sum, pathSum))
+            return true;
+        
+        pathSum -= root->val;
+        
+        return false;
+    }        
+    
+    bool hasPathSum(TreeNode* root, int sum) {
+        auto pathSum = 0;
+        return hasPathSum(root, sum, pathSum);
+    }
+
     void run()
     {
         std::cout << "[DataStructures][Trees]  Start" << std::endl;
@@ -298,6 +371,46 @@ namespace DataStructures::Trees
             assert(result == true);
 
             std::cout << "  [PASSED] 101. Symmetric Tree" << std::endl;
+        }
+        
+        {
+            auto tree = new TreeNode(4);
+            tree->left = new TreeNode(2);
+            tree->right = new TreeNode(7);
+            tree->left->left = new TreeNode(1);
+            tree->left->right = new TreeNode(3);
+            tree->right->left = new TreeNode(6);
+            tree->right->right = new TreeNode(9);
+            
+            auto expected = new TreeNode(4);
+            expected->left = new TreeNode(7);
+            expected->right = new TreeNode(2);
+            expected->left->left = new TreeNode(9);
+            expected->left->right = new TreeNode(6);
+            expected->right->left = new TreeNode(3);
+            expected->right->right = new TreeNode(1);
+
+            auto result = invertTree(tree);
+            assert(equal(result, expected) == true);
+
+            std::cout << "  [PASSED] 226. Invert Binary Tree" << std::endl;
+        }
+        
+        {
+            auto tree = new TreeNode(5);
+            tree->left = new TreeNode(4);
+            tree->right = new TreeNode(8);
+            tree->left->left = new TreeNode(11);
+            tree->left->left->right = new TreeNode(7);
+            tree->left->left->right = new TreeNode(2);
+            tree->right->left = new TreeNode(13);
+            tree->right->right = new TreeNode(4);
+            tree->right->right->right = new TreeNode(1);
+
+            auto result = hasPathSum(tree, 22);
+            assert(result == true);
+
+            std::cout << "  [PASSED] 112. Path Sum" << std::endl;
         }
 
         std::cout << "[DataStructures][Trees]  End" << std::endl;
