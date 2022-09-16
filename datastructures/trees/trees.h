@@ -289,6 +289,78 @@ namespace DataStructures::Trees
         auto pathSum = 0;
         return hasPathSum(root, sum, pathSum);
     }
+    
+    /*
+    700. Search in a Binary Search Tree
+    Easy
+
+    You are given the root of a binary search tree (BST) and an integer val.
+
+    Find the node in the BST that the node's value equals val and return the subtree rooted with that node. If such a node does not exist, return null.
+
+    Example 1:
+
+    Input: root = [4,2,7,1,3], val = 2
+    Output: [2,1,3]
+    */
+    TreeNode* searchBST(TreeNode* root, int val) {
+        if (root == nullptr)
+            return nullptr;
+        
+        if (root->val == val)
+            return root;
+        
+        if (root->val > val && root->left != nullptr)
+            return searchBST(root->left, val);
+        else if (root->right != nullptr)
+            return searchBST(root->right, val);
+        
+        return nullptr;
+    }
+
+    /*
+    701. Insert into a Binary Search Tree
+    Medium
+
+    You are given the root node of a binary search tree (BST) and a value to insert into the tree. Return the root node of the BST after the insertion. It is guaranteed that the new value does not exist in the original BST.
+
+    Notice that there may exist multiple valid ways for the insertion, as long as the tree remains a BST after insertion. You can return any of them.
+
+    Example 1:
+
+    Input: root = [4,2,7,1,3], val = 5
+    Output: [4,2,7,1,3,5]
+    */
+    void insertIntoBST(TreeNode*& root, TreeNode *node, int val) {
+        if (root == nullptr)
+        {   
+           root = new TreeNode(val);
+           return;
+        }
+        
+        if (node->val > val)
+        {
+            if (node->left != nullptr)
+                return insertIntoBST(root, node->left, val);
+            
+            node->left = new TreeNode(val);
+            return;
+        }
+        else
+        {
+            if (node->right != nullptr)
+                return insertIntoBST(root, node->right, val);
+            
+            node->right = new TreeNode(val);
+            return;
+        }
+    }
+    
+    TreeNode* insertIntoBST(TreeNode* root, int val) {
+        insertIntoBST(root, root, val);
+        
+        return root;
+    }
 
     void run()
     {
@@ -411,6 +483,43 @@ namespace DataStructures::Trees
             assert(result == true);
 
             std::cout << "  [PASSED] 112. Path Sum" << std::endl;
+        }
+        
+        {
+            auto tree = new TreeNode(4);
+            tree->left = new TreeNode(2);
+            tree->right = new TreeNode(7);
+            tree->left->left = new TreeNode(1);
+            tree->left->right = new TreeNode(3);
+            
+            auto expected = new TreeNode(2);
+            expected->left = new TreeNode(1);
+            expected->right = new TreeNode(3);
+
+            auto result = searchBST(tree, 2);
+            assert(equal(result, expected) == true);
+
+            std::cout << "  [PASSED] 700. Search in a Binary Search Tree" << std::endl;
+        }
+        
+        {
+            auto tree = new TreeNode(4);
+            tree->left = new TreeNode(2);
+            tree->right = new TreeNode(7);
+            tree->left->left = new TreeNode(1);
+            tree->left->right = new TreeNode(3);
+
+            auto expected = new TreeNode(4);
+            expected->left = new TreeNode(2);
+            expected->right = new TreeNode(7);
+            expected->left->left = new TreeNode(1);
+            expected->left->right = new TreeNode(3);
+            expected->right->left = new TreeNode(5);
+
+            auto result = insertIntoBST(tree, 5);
+            assert(equal(result, expected) == true);
+
+            std::cout << "  [PASSED] 701. Insert into a Binary Search Tree" << std::endl;
         }
 
         std::cout << "[DataStructures][Trees]  End" << std::endl;
