@@ -1,4 +1,5 @@
 #include <stack>
+#include <optional>
 #include <vector>
 
 #include "..\..\common\treenode.h"
@@ -362,6 +363,125 @@ namespace DataStructures::Trees
         return root;
     }
 
+    /*
+    98. Validate Binary Search Tree
+    Medium
+
+    Given the root of a binary tree, determine if it is a valid binary search tree (BST).
+
+    A valid BST is defined as follows:
+
+        The left subtree of a node contains only nodes with keys less than the node's key.
+        The right subtree of a node contains only nodes with keys greater than the node's key.
+        Both the left and right subtrees must also be binary search trees.
+
+    Example 1:
+
+    Input: root = [2,1,3]
+    Output: true
+    */
+    bool isValidBST(TreeNode* root, std::optional<int> min, std::optional<int> max) {
+        if (root == nullptr)
+            return true;
+        
+        if (max)
+        {
+            if (root->val >= max.value())
+                return false;
+        
+            if (root->left && root->left->val >= max.value())
+                return false;
+            
+            if (root->right && root->right->val >= max.value())
+                return false;
+        }
+        
+        if (min)
+        {
+            if (root->val <= min.value())
+                return false;
+        
+            if (root->left && root->left->val <= min.value())
+                return false;
+            
+            if (root->right && root->right->val <= min.value())
+                return false;
+        }
+        
+        if (root->left && !isValidBST(root->left, min, root->val))
+            return false;
+        
+        if (root->right && !isValidBST(root->right, root->val, max))
+            return false;
+        
+        return true;
+    }
+    
+    bool isValidBST(TreeNode* root) {
+        if (root == nullptr)
+            return true;
+        
+        return isValidBST(root->left, std::nullopt, root->val) && isValidBST(root->right, root->val, std::nullopt);
+    }
+
+    /*
+    653. Two Sum IV - Input is a BST
+    Easy
+
+    Given the root of a Binary Search Tree and a target number k, return true if there exist two elements in the BST such that their sum is equal to the given target.
+
+    Example 1:
+
+    Input: root = [5,3,6,2,4,null,7], k = 9
+    Output: true
+    */
+    bool findTarget(TreeNode* root, unordered_set<int> &s, int k) {
+        if (root == nullptr)
+            return false;        
+        
+        auto findIt = s.find(root->val);
+        if (findIt != s.end())
+            return true;
+        auto cp = k - root->val;
+        s.insert(cp);
+        
+        if (root->left != nullptr && findTarget(root->left, s, k))
+            return true;
+        if (root->right != nullptr && findTarget(root->right, s, k))
+            return true;
+        
+        return false;
+    }
+    
+    bool findTarget(TreeNode* root, int k) {
+        unordered_set<int> s;
+        return findTarget(root, s, k);
+    }
+
+    /*
+    235. Lowest Common Ancestor of a Binary Search Tree
+    Medium
+
+    Given a binary search tree (BST), find the lowest common ancestor (LCA) node of two given nodes in the BST.
+
+    According to the definition of LCA on Wikipedia: “The lowest common ancestor is defined between two nodes p and q as the lowest node in T that has both p and q as descendants (where we allow a node to be a descendant of itself).”
+
+    Example 1:
+
+    Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
+    Output: 6
+    Explanation: The LCA of nodes 2 and 8 is 6.
+    */
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if ((root -> val > p -> val) && (root -> val > q -> val)) {
+            return lowestCommonAncestor(root -> left, p, q);
+        }
+        if ((root -> val < p -> val) && (root -> val < q -> val)) {
+            return lowestCommonAncestor(root -> right, p, q);
+        }
+        return root;
+    }
+
     void run()
     {
         std::cout << "[DataStructures][Trees]  Start" << std::endl;
@@ -520,6 +640,50 @@ namespace DataStructures::Trees
             assert(equal(result, expected) == true);
 
             std::cout << "  [PASSED] 701. Insert into a Binary Search Tree" << std::endl;
+        }
+        
+        {
+            auto tree = new TreeNode(5);
+            tree->left = new TreeNode(1);
+            tree->right = new TreeNode(4);
+            tree->right->left = new TreeNode(3);
+            tree->right->right = new TreeNode(6);
+
+            auto result = isValidBST(tree);
+            assert(result == false);
+
+            std::cout << "  [PASSED] 98. Validate Binary Search Tree" << std::endl;
+        }
+        
+        {
+            auto tree = new TreeNode(5);
+            tree->left = new TreeNode(3);
+            tree->right = new TreeNode(6);
+            tree->left->left = new TreeNode(2);
+            tree->left->right = new TreeNode(4);
+            tree->right->right = new TreeNode(7);
+
+            auto result = findTarget(tree, 9);
+            assert(result == true);
+
+            std::cout << "  [PASSED] 653. Two Sum IV - Input is a BST" << std::endl;
+        }
+        
+        {
+            auto tree = new TreeNode(6);
+            tree->left = new TreeNode(2);
+            tree->right = new TreeNode(8);
+            tree->left->left = new TreeNode(0);
+            tree->left->right = new TreeNode(4);
+            tree->right->left = new TreeNode(7);
+            tree->right->right = new TreeNode(9);
+            tree->left->right->left = new TreeNode(3);
+            tree->left->right->right = new TreeNode(5);
+
+            auto result = lowestCommonAncestor(tree, tree->left, tree->right);
+            assert(result == tree);
+
+            std::cout << "  [PASSED] 235. Lowest Common Ancestor of a Binary Search Tree" << std::endl;
         }
 
         std::cout << "[DataStructures][Trees]  End" << std::endl;
