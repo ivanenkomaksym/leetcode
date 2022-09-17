@@ -4,7 +4,8 @@
 #include "algorithms/depthfirstsearch/depthfirstsearch.h"
 #include "algorithms/backtracking/backtracking.h"
 #include "algorithms/dynamicprogramming/dynamicprogramming.h"
-#include "algorithms/bitmanipulation/bitmanipulation"
+#include "algorithms/bitmanipulation/bitmanipulation.h"
+#include "algorithms/counting/counting.h"
 #include "datastructures/arrays/arrays.h"
 #include "datastructures/strings/strings.h"
 #include "datastructures/linkedlists/linkedlists.h"
@@ -26,6 +27,7 @@ int main()
     Algorithms::Backtracking::run();
     Algorithms::DynamicProgramming::run();
     Algorithms::BitManipulation::run();
+    Algorithms::Counting::run();
 
     return 1;
 }
