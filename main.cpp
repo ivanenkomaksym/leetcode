@@ -6,6 +6,7 @@
 #include "algorithms/dynamicprogramming/dynamicprogramming.h"
 #include "algorithms/bitmanipulation/bitmanipulation.h"
 #include "algorithms/counting/counting.h"
+#include "algorithms/divideandconquer/divideandconquer.h"
 #include "datastructures/arrays/arrays.h"
 #include "datastructures/strings/strings.h"
 #include "datastructures/linkedlists/linkedlists.h"
@@ -28,6 +29,7 @@ int main()
     Algorithms::DynamicProgramming::run();
     Algorithms::BitManipulation::run();
     Algorithms::Counting::run();
+    Algorithms::DivideAndConquer::run();
 
     return 1;
 }
