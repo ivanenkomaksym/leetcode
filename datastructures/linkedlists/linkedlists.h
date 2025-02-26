@@ -187,6 +187,22 @@ namespace DataStructures::LinkedLists
         return reversedList;
     }
 
+    ListNode* reverseListInPlace(ListNode* head) {
+        ListNode* prev = nullptr;
+        ListNode* curr = head;
+        ListNode* next = nullptr;
+
+        while (curr != nullptr)
+        {
+            next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+
+        return prev;
+    }
+
     /*
     83. Remove Duplicates from Sorted List
     Easy
@@ -298,7 +314,26 @@ namespace DataStructures::LinkedLists
             auto result = reverseList(list);
             assert(equal(result, expected));
 
-            std::cout << "  [PASSED] 206. Reverse Linked List" << std::endl;
+            std::cout << "  [PASSED] 206.1 Reverse Linked List" << std::endl;
+        }
+        
+        {            
+            auto list = new ListNode(1);
+            list->next = new ListNode(2);
+            list->next->next = new ListNode(3);
+            list->next->next->next = new ListNode(4);
+            list->next->next->next->next = new ListNode(5);
+            
+            auto expected = new ListNode(5);
+            expected->next = new ListNode(4);
+            expected->next->next = new ListNode(3);
+            expected->next->next->next = new ListNode(2);
+            expected->next->next->next->next = new ListNode(1);
+
+            auto result = reverseListInPlace(list);
+            assert(equal(result, expected));
+
+            std::cout << "  [PASSED] 206.2 Reverse Linked List in-place" << std::endl;
         }
         
         {            
