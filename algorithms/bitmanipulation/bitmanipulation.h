@@ -1,3 +1,4 @@
+#include <cstdint>
 using namespace std;
 
 namespace Algorithms::BitManipulation
