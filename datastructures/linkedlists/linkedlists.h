@@ -238,6 +238,42 @@ namespace DataStructures::LinkedLists
         return head;
     }
 
+    /*
+    Problem: Find the Middle Node of a Linked List
+
+    If the list has an odd number of nodes, return the middle one.
+    If the list has an even number of nodes, return the second middle node.
+    Efficient approach: Use two pointers (slow & fast) instead of counting nodes.
+    
+    Input: head = [3,2,1,0,-4], pos = 1
+    Output: 1
+
+    1: slow = 3, fast = 2
+    2: slow = 2, fast = 0
+    3: slow = 1, fast = nullptr
+
+    Input: head = [3,2,0,-4], pos = 1
+    Output: 0    
+
+    1: slow = 3, fast = 2
+    2: slow = 2, fast = 0
+    3: slow = 0, fast = nullptr
+    */
+    ListNode* middleNode(ListNode* head) {
+        if (head == nullptr)
+            return nullptr;
+
+        auto slow = head;
+        auto fast = head;
+    
+        while (fast != nullptr && fast->next != nullptr) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+    
+        return slow;
+    }
+
     void run()
     {
         std::cout << "[DataStructures][LinkedLists]  Start" << std::endl;
@@ -348,6 +384,27 @@ namespace DataStructures::LinkedLists
             assert(equal(result, expected));
 
             std::cout << "  [PASSED] 83. Remove Duplicates from Sorted List" << std::endl;
+        }
+        
+        {
+            auto listNode = new ListNode(3);
+            listNode->next = new ListNode(2);
+            listNode->next->next = new ListNode(0);
+            listNode->next->next->next = new ListNode(-4);
+
+            auto result = middleNode(listNode);
+            assert(result->val == 0);
+            
+            auto listNode2 = new ListNode(3);
+            listNode2->next = new ListNode(2);
+            listNode2->next->next = new ListNode(1);
+            listNode2->next->next->next = new ListNode(0);
+            listNode2->next->next->next->next = new ListNode(-4);
+
+            auto result2 = middleNode(listNode2);
+            assert(result2->val == 1);
+
+            std::cout << "  [PASSED] Linked List Middle Node" << std::endl;
         }
 
         std::cout << "[DataStructures][LinkedLists]  End" << std::endl;
