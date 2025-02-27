@@ -1,4 +1,5 @@
 #include <string>
+#include "minstack.h"
 
 namespace DataStructures::Stacks
 {
@@ -164,6 +165,19 @@ namespace DataStructures::Stacks
             assert(myQueue.empty() == false); // return false
 
             std::cout << "  [PASSED] 232. Implement Queue using Stacks" << std::endl;
+        }
+        
+        {
+            MinStack stack;
+            stack.push(5);
+            stack.push(2);
+            stack.push(8);
+            stack.push(1);
+            assert(stack.getMin() == 1);
+            stack.pop();
+            assert(stack.getMin() == 2);
+
+            std::cout << "  [PASSED] Implement Min Stack" << std::endl;
         }
 
         std::cout << "[DataStructures][Stacks]  End" << std::endl;
