@@ -182,6 +182,29 @@ namespace DataStructures::Trees
         maxDepth(root, 1, answer);
         return answer;
     }
+    
+    int maxDepthIterative(TreeNode* root) {
+        if (!root)
+            return 0;
+        
+        auto maxDepth = 1;
+        auto stack = std::stack<std::pair<TreeNode*, int>>();
+        stack.push({root, 1});
+        while (!stack.empty())
+        {
+            auto [node, depth] = stack.top();
+            stack.pop();
+
+            if (node->right)
+                stack.push({node->right, depth + 1});
+            if (node->left)
+                stack.push({node->left, depth + 1});
+                
+            maxDepth = std::max(maxDepth, depth);
+        }
+        
+        return maxDepth;
+    }
 
     /*
     101. Symmetric Tree
@@ -548,6 +571,21 @@ namespace DataStructures::Trees
             assert(result == 3);
 
             std::cout << "  [PASSED] 104. Maximum Depth of Binary Tree" << std::endl;
+        }
+        
+        {
+            auto tree = new TreeNode(3);
+            tree->left = new TreeNode(9);
+            tree->right = new TreeNode(20);
+            tree->right->left = new TreeNode(15);
+            tree->right->right = new TreeNode(7);
+            tree->right->right->left = new TreeNode(16);
+            tree->right->right->left->right = new TreeNode(24);
+
+            auto result = maxDepthIterative(tree);
+            assert(result == 5);
+
+            std::cout << "  [PASSED] 104.2 Maximum Iterative Depth of Binary Tree" << std::endl;
         }
         
         {
