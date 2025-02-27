@@ -12,6 +12,7 @@
 #include "datastructures/linkedlists/linkedlists.h"
 #include "datastructures/stacks/stacks.h"
 #include "datastructures/trees/trees.h"
+#include "datastructures/hashmaps/hashmaps.h"
 
 int main()
 {
@@ -20,6 +21,7 @@ int main()
     DataStructures::LinkedLists::run();
     DataStructures::Stacks::run();
     DataStructures::Trees::run();
+    DataStructures::HashMaps::run();
 
     Algorithms::BinarySearch::run();
     Algorithms::TwoPointers::run();
