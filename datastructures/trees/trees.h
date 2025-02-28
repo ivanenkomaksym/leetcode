@@ -522,6 +522,28 @@ namespace DataStructures::Trees
         return false;
     }
 
+    TreeNode* lowestCommonAncestorGeneralBinaryTree(TreeNode* root, TreeNode* p, TreeNode* q) {
+        std::deque<TreeNode *> parentsP;
+        fillNodeParents(root, p, parentsP);
+        std::deque<TreeNode *> parentsQ;
+        fillNodeParents(root, q, parentsQ);
+
+        auto lowestCommonAncestor = root;
+        while (!parentsP.empty() && !parentsQ.empty())
+        {
+            auto parentP = parentsP.front();
+            auto parentQ = parentsQ.front();
+            if (parentP != parentQ)
+                break;
+
+            lowestCommonAncestor = parentP;
+            parentsP.pop_front();
+            parentsQ.pop_front();
+        }
+
+        return lowestCommonAncestor;
+    }
+
     void run()
     {
         std::cout << "[DataStructures][Trees]  Start" << std::endl;
@@ -780,6 +802,33 @@ namespace DataStructures::Trees
             
 
             std::cout << "  [PASSED] Fill node parents" << std::endl;
+        }
+        
+        {
+            //      3
+            //     / \
+            //    5   1
+            //   / \  / \
+            //  6  2 0  8
+            //    / \
+            //   7   4
+            //
+            // LCA(7, 8) = 3
+
+            auto tree = new TreeNode(3);
+            tree->left = new TreeNode(5);
+            tree->right = new TreeNode(1);
+            tree->left->left = new TreeNode(6);
+            tree->left->right = new TreeNode(2);
+            tree->right->left = new TreeNode(0);
+            tree->right->right = new TreeNode(8);
+            tree->left->right->left = new TreeNode(7);
+            tree->left->right->right = new TreeNode(4);
+            
+            auto result = lowestCommonAncestorGeneralBinaryTree(tree, tree->left->right->left, tree->right);
+            assert(result->val == 3);
+
+            std::cout << "  [PASSED] 235.2 Lowest Common Ancestor of a General Binary Tree" << std::endl;
         }
 
         std::cout << "[DataStructures][Trees]  End" << std::endl;
