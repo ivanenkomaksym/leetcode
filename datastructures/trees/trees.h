@@ -505,6 +505,23 @@ namespace DataStructures::Trees
         return root;
     }
 
+    bool fillNodeParents(TreeNode* root, TreeNode* node, std::deque<TreeNode *> &parents)
+    {
+        if (root == nullptr)
+            return false;
+            
+        if (root == node)
+            return true;
+        
+        if (fillNodeParents(root->left, node, parents) || fillNodeParents(root->right, node, parents))
+        {
+            parents.push_front(root);
+            return true;
+        }
+
+        return false;
+    }
+
     void run()
     {
         std::cout << "[DataStructures][Trees]  Start" << std::endl;
@@ -722,6 +739,47 @@ namespace DataStructures::Trees
             assert(result == tree);
 
             std::cout << "  [PASSED] 235. Lowest Common Ancestor of a Binary Search Tree" << std::endl;
+        }
+        
+        {
+            //      3
+            //     / \
+            //    5   1
+            //   / \  / \
+            //  6  2 0  8
+            //    / \
+            //   7   4
+            //
+            // (4): (3) -> (5) -> (2)
+
+            auto tree = new TreeNode(3);
+            tree->left = new TreeNode(5);
+            tree->right = new TreeNode(1);
+            tree->left->left = new TreeNode(6);
+            tree->left->right = new TreeNode(2);
+            tree->right->left = new TreeNode(0);
+            tree->right->right = new TreeNode(8);
+            tree->left->right->left = new TreeNode(7);
+            tree->left->right->right = new TreeNode(4);
+
+            auto expectedParents = deque<TreeNode*>();
+            expectedParents.push_front(tree->left->right);
+            expectedParents.push_front(tree->left);
+            expectedParents.push_front(tree);
+
+            auto result = deque<TreeNode *>();
+            fillNodeParents(tree, tree->left->right->right, result);
+            
+            assert(result.size() == expectedParents.size());
+            while (!result.empty())
+            {
+                assert(result.front() == expectedParents.front());
+                result.pop_front();
+                expectedParents.pop_front();
+            }
+            
+
+            std::cout << "  [PASSED] Fill node parents" << std::endl;
         }
 
         std::cout << "[DataStructures][Trees]  End" << std::endl;
