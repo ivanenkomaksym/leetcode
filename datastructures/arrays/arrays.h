@@ -435,6 +435,39 @@ namespace DataStructures::Arrays
         return matrix[foundRow][foundCol] == target;
     }
 
+    /* Find the Longest Consecutive Sequence
+    Given an unsorted array of integers, find the length of the longest consecutive elements sequence.
+
+    Input: nums = {100, 4, 200, 1, 3, 2}
+    Output: 4
+    Explanation: The longest consecutive sequence is {1, 2, 3, 4}, so the length is 4.
+    */
+    int longestConsecutiveSequence(vector<int> nums) {
+        std::unordered_set<int> numSet;
+        for (auto num : nums)
+            numSet.insert(num);
+
+        int longestStreak = 0;
+        for (auto num : numSet)
+        {
+            if (numSet.find(num - 1) == numSet.end())
+            {
+                int currentNum = num;
+                int currentStreak = 1;
+
+                while (numSet.find(currentNum + 1) != numSet.end())
+                {
+                    currentNum += 1;
+                    currentStreak += 1;
+                }
+
+                longestStreak = std::max(longestStreak, currentStreak);
+            }
+        }
+
+        return longestStreak;
+    }
+
     void run()
     {
         std::cout << "[DataStructures][Arrays]  Start" << std::endl;
@@ -540,6 +573,16 @@ namespace DataStructures::Arrays
 
             std::cout << "  [PASSED] 74. Search a 2D Matrix" << std::endl;
         }
+
+        {
+            auto v = std::vector<int>{100, 4, 200, 1, 3, 2};
+            auto result = longestConsecutiveSequence(v);
+
+            assert(result == 4);
+
+            std::cout << "  [PASSED] Longest consecutive sequence" << std::endl;
+        }
+
         std::cout << "[DataStructures][Arrays]  End" << std::endl;
     }
 }
