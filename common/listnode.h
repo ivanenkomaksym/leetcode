@@ -24,4 +24,14 @@ auto equal(ListNode *list1, ListNode *list2) -> bool
     return true;
 }
 
+auto print(ListNode *list) -> void
+{
+    while (list != nullptr)
+    {
+        std::cout << list->val << " -> ";
+        list = list->next;
+    }
+    std::cout << std::endl;
+}
+
 #endif

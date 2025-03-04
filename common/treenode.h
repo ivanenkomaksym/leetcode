@@ -35,4 +35,14 @@ auto equal(TreeNode *p, TreeNode *q) -> bool
     return p->val == q->val;
 }
 
+auto print(TreeNode *root) -> void
+{
+    if (root == nullptr)
+        return;
+    
+    std::cout << root->val << " ";
+    print(root->left);
+    print(root->right);
+}
+
 #endif
