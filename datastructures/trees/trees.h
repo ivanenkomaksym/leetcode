@@ -544,6 +544,39 @@ namespace DataStructures::Trees
         return lowestCommonAncestor;
     }
 
+    /*
+    Diameter of of a Binary Tree
+        Input:
+         1
+        / \
+       2   3
+      / \     
+     4   5    
+
+    Output: 3
+    The longest path is [4 → 2 → 5] or [4 → 2 → 1 → 3], both of which have length 3.
+    */
+    int diameterInternal(TreeNode* root, int &maxDiameter)
+    {
+        if (root == nullptr)
+            return 0;
+        
+        auto left = diameterInternal(root->left, maxDiameter);
+        auto right = diameterInternal(root->right, maxDiameter);
+
+        // Update diameter at every node (sum of left and right heights)
+        maxDiameter = std::max(maxDiameter, left + right);
+        
+        // Return height of this node
+        return std::max(left, right) + 1;
+    }
+
+    int diameter(TreeNode* root) {
+        int maxDiameter = 0;
+        diameterInternal(root, maxDiameter);
+        return maxDiameter;
+    }
+
     void run()
     {
         std::cout << "[DataStructures][Trees]  Start" << std::endl;
@@ -829,6 +862,33 @@ namespace DataStructures::Trees
             assert(result->val == 3);
 
             std::cout << "  [PASSED] 235.2 Lowest Common Ancestor of a General Binary Tree" << std::endl;
+        }
+        
+        {
+            //      3
+            //     / \
+            //    5   1
+            //   / \  / \
+            //  6  2 0  8
+            //    / \
+            //   7   4
+            //
+            // diamater = 5
+
+            auto tree = new TreeNode(3);
+            tree->left = new TreeNode(5);
+            tree->right = new TreeNode(1);
+            tree->left->left = new TreeNode(6);
+            tree->left->right = new TreeNode(2);
+            tree->right->left = new TreeNode(0);
+            tree->right->right = new TreeNode(8);
+            tree->left->right->left = new TreeNode(7);
+            tree->left->right->right = new TreeNode(4);
+            
+            auto result = diameter(tree);
+            assert(result == 5);
+
+            std::cout << "  [PASSED] Diameter of a Binary Tree" << std::endl;
         }
 
         std::cout << "[DataStructures][Trees]  End" << std::endl;
